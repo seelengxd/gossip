@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	postsDb "gossip/internal/dataaccess"
 	"gossip/internal/database"
 	"gossip/internal/models"
 	"net/http"
@@ -26,15 +27,12 @@ func PostCtx(next http.Handler) http.Handler {
 		}
 
 		db := database.GetDb()
-		var post *models.Post
+		post, err := postsDb.Find(db, id)
 
-		result := db.Find(&post, id)
-		if result.Error != nil || post.ID == 0 {
+		if err != nil || post.ID == 0 {
 			http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
 			return
 		}
-
-		fmt.Println(post)
 
 		ctx := context.WithValue(r.Context(), "post", post)
 
@@ -45,8 +43,7 @@ func PostCtx(next http.Handler) http.Handler {
 
 func HandleIndex(w http.ResponseWriter, r *http.Request) {
 	db := database.GetDb()
-	posts := make([]models.Post, 0)
-	db.Find(&posts)
+	posts, _ := postsDb.List(db)
 
 	json.NewEncoder(w).Encode(posts)
 }
@@ -57,15 +54,13 @@ func HandleShow(w http.ResponseWriter, r *http.Request) {
 }
 
 func HandleCreate(w http.ResponseWriter, r *http.Request) {
-	// r.ParseForm()  must be called before you do things with forms
-	r.ParseForm()
 	title := r.FormValue("title")
 	content := r.FormValue("content")
 
 	newPost := models.Post{Title: title, Content: content}
 
 	db := database.GetDb()
-	db.Create(&newPost)
+	postsDb.Create(db, &newPost)
 
 	json.NewEncoder(w).Encode(newPost)
 }
@@ -76,7 +71,7 @@ func HandleUpdate(w http.ResponseWriter, r *http.Request) {
 	content := r.FormValue("content")
 
 	db := database.GetDb()
-	db.Model(post).Updates(models.Post{Title: title, Content: content})
+	postsDb.Update(db, post, title, content)
 
 }
 
@@ -84,5 +79,5 @@ func HandleDestroy(w http.ResponseWriter, r *http.Request) {
 	post := r.Context().Value("post").(*models.Post)
 	db := database.GetDb()
 
-	db.Delete(post)
+	postsDb.Destroy(db, post)
 }
