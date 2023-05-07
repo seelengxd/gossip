@@ -7,13 +7,18 @@ import (
 )
 
 func AddPostRoutes(r chi.Router) {
-	r.Get("/posts", posts.HandleIndex)
+	r.Route("/posts", func(r chi.Router) {
+		r.Get("/", posts.HandleIndex)
 
-	r.Get("/posts/{id}", posts.HandleShow)
+		r.Post("/", posts.HandleCreate)
 
-	r.Post("/posts", posts.HandleCreate)
+		r.Route("/{id}", func(r chi.Router) {
+			r.Use(posts.PostCtx)
+			r.Get("/", posts.HandleShow)
+			r.Put("/", posts.HandleUpdate)
+			r.Delete("/", posts.HandleDestroy)
 
-	r.Put("/posts/{id}", posts.HandleUpdate)
+		})
 
-	r.Delete("/posts/{id}", posts.HandleDestroy)
+	})
 }
