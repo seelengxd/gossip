@@ -3,18 +3,33 @@ package comments
 import (
 	"context"
 	"encoding/json"
+	"fmt"
+	"gossip/internal/dataaccess/comments"
 	"gossip/internal/database"
 	"gossip/internal/models"
 	"net/http"
+	"strconv"
+
+	"github.com/go-chi/chi/v5"
 )
 
 func CommentCtx(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		post := r.Context().Value("post").(*models.Post)
+		// post := r.Context().Value("post").(*models.Post)
 		db := database.GetDb()
 
-		var comment *models.Comment
-		err := db.Model(&post).Association("Comments").Find(&comment, 1)
+		idParam := chi.URLParam(r, "id")
+		id, err := strconv.Atoi(idParam)
+
+		if err != nil {
+			fmt.Println(err)
+			http.Error(w, http.StatusText(http.StatusUnprocessableEntity), http.StatusUnprocessableEntity)
+			return
+		}
+
+		comment, err := comments.Find(db, id)
+
+		fmt.Println(comment)
 
 		if err != nil || comment.ID == 0 {
 			http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)
@@ -42,7 +57,7 @@ func HandleCreate(w http.ResponseWriter, r *http.Request) {
 	content := r.FormValue("content")
 
 	db := database.GetDb()
-	db.Model(&post).Association("Comments").Append(&models.Comment{Content: content})
+	comments.Create(db, post, content)
 }
 
 func HandleUpdate(w http.ResponseWriter, r *http.Request) {
@@ -50,12 +65,12 @@ func HandleUpdate(w http.ResponseWriter, r *http.Request) {
 	content := r.FormValue("content")
 
 	db := database.GetDb()
-	db.Model(&comment).Updates(models.Comment{Content: content})
+	comments.Update(db, comment, content)
 }
 
 func HandleDestroy(w http.ResponseWriter, r *http.Request) {
 	comment := r.Context().Value("comment").(*models.Comment)
 
 	db := database.GetDb()
-	db.Delete(&comment)
+	comments.Destroy(db, comment)
 }

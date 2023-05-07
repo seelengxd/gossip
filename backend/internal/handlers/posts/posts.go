@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	postsDb "gossip/internal/dataaccess"
+	postsDb "gossip/internal/dataaccess/posts"
 	"gossip/internal/database"
 	"gossip/internal/models"
 	"net/http"
