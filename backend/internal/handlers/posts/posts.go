@@ -17,7 +17,7 @@ import (
 // https://github.com/go-chi/chi/blob/7f280968675bcc9f310008fc6b8abff0b923734c/_examples/rest/main.go#L128
 func PostCtx(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		idParam := chi.URLParam(r, "id")
+		idParam := chi.URLParam(r, "postId")
 		id, err := strconv.Atoi(idParam)
 
 		if err != nil {

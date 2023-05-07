@@ -12,7 +12,7 @@ func AddPostRoutes(r chi.Router) {
 
 		r.Post("/", posts.HandleCreate)
 
-		r.Route("/{id}", func(r chi.Router) {
+		r.Route("/{postId}", func(r chi.Router) {
 			r.Use(posts.PostCtx)
 			r.Get("/", posts.HandleShow)
 			r.Put("/", posts.HandleUpdate)

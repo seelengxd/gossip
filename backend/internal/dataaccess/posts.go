@@ -14,7 +14,7 @@ func List(db *gorm.DB) (*[]models.Post, error) {
 
 func Find(db *gorm.DB, id int) (*models.Post, error) {
 	var post models.Post
-	result := db.First(&post, id)
+	result := db.Model(&models.Post{}).Preload("Comments").First(&post, id)
 	return &post, result.Error
 }
 

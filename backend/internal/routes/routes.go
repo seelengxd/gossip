@@ -7,5 +7,6 @@ import (
 func GetRoutes() func(r chi.Router) {
 	return func(r chi.Router) {
 		AddPostRoutes(r)
+		AddCommentsRoutes(r)
 	}
 }
