@@ -17,6 +17,7 @@ func SetupDb() {
 		panic("Error opening the database.")
 	}
 	db.AutoMigrate(&models.Post{})
+	db.AutoMigrate(&models.Comment{})
 
 	globalDb = db
 }
