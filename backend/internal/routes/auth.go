@@ -7,7 +7,11 @@ import (
 )
 
 func AddAuthRoutes(r chi.Router) {
+	r.Group(func(r chi.Router) {
+		r.Use(auth.RequireLogin)
+		r.Get("/logout", auth.HandleLogout)
+	})
 	r.Post("/login", auth.HandleLogin)
-	r.Post("/logout", auth.HandleLogout)
+
 	r.Post("/signup", auth.HandleSignup)
 }
