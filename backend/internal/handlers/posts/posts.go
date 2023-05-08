@@ -3,7 +3,6 @@ package posts
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	postsDb "gossip/internal/dataaccess/posts"
 	"gossip/internal/database"
 	"gossip/internal/models"
@@ -21,7 +20,6 @@ func PostCtx(next http.Handler) http.Handler {
 		id, err := strconv.Atoi(idParam)
 
 		if err != nil {
-			fmt.Println(err)
 			http.Error(w, http.StatusText(http.StatusUnprocessableEntity), http.StatusUnprocessableEntity)
 			return
 		}
@@ -56,11 +54,12 @@ func HandleShow(w http.ResponseWriter, r *http.Request) {
 func HandleCreate(w http.ResponseWriter, r *http.Request) {
 	title := r.FormValue("title")
 	content := r.FormValue("content")
+	user := r.Context().Value("user").(models.User)
 
 	newPost := models.Post{Title: title, Content: content}
 
 	db := database.GetDb()
-	postsDb.Create(db, &newPost)
+	postsDb.Create(db, &user, &newPost)
 
 	json.NewEncoder(w).Encode(newPost)
 }

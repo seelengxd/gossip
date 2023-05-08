@@ -18,6 +18,7 @@ function Input({ label, value, onChange }: InputProps) {
         value={value}
         placeholder={`your ${label}...`}
         onChange={onChange}
+        required
       ></input>
     </div>
   );

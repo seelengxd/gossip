@@ -3,7 +3,6 @@ package comments
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"gossip/internal/dataaccess/comments"
 	"gossip/internal/database"
 	"gossip/internal/models"
@@ -22,14 +21,11 @@ func CommentCtx(next http.Handler) http.Handler {
 		id, err := strconv.Atoi(idParam)
 
 		if err != nil {
-			fmt.Println(err)
 			http.Error(w, http.StatusText(http.StatusUnprocessableEntity), http.StatusUnprocessableEntity)
 			return
 		}
 
 		comment, err := comments.Find(db, id)
-
-		fmt.Println(comment)
 
 		if err != nil || comment.ID == 0 {
 			http.Error(w, http.StatusText(http.StatusNotFound), http.StatusNotFound)

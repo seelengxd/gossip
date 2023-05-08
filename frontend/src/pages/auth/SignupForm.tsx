@@ -4,7 +4,6 @@ import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../app/store";
 import { setUser } from "../../reducers/authSlice";
-import Snackbar from "../../components/Snackbar";
 import { signUp } from "../../services/authService";
 import Form from "../../components/Form";
 

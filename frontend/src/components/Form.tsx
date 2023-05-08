@@ -1,13 +1,13 @@
 import { MouseEvent } from "react";
 import Snackbar from "./Snackbar";
 
-interface Props extends React.PropsWithChildren {
+interface Props {
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   error: string;
   onClose: (e: React.MouseEvent<HTMLOrSVGElement>) => void;
 }
 
-function Form(props: Props) {
+function Form(props: React.PropsWithChildren<Props>) {
   const { handleSubmit, error, onClose } = props;
   return (
     <div className="container min-h-full mx-auto">

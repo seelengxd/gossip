@@ -35,9 +35,12 @@ function Navbar() {
         {user ? (
           <>
             <p className="align-middle">{user.username}</p>
-            <a className="hover:text-teal-300" onClick={handleLogout}>
+            <p
+              className="hover:text-teal-300 cursor-pointer"
+              onClick={handleLogout}
+            >
               Log out
-            </a>
+            </p>
           </>
         ) : (
           <>
