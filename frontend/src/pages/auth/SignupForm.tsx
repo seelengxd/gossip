@@ -1,13 +1,59 @@
 import { useState } from "react";
 import Input from "../../components/Input";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../app/store";
+import axios from "axios";
+import { setUser } from "../../reducers/authSlice";
+import Snackbar from "../../components/Snackbar";
 
 function SignupForm() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+  const user = useSelector((state: RootState) => state.auth.user);
+  const dispatch = useDispatch();
+  const [error, setError] = useState("");
+  const baseUrl = process.env.REACT_APP_API_BASE_URL;
+
+  if (user != null) {
+    navigate("/");
+  }
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    axios
+      .post(
+        `${baseUrl}/signup`,
+        {
+          username,
+          password,
+        },
+        {
+          headers: {
+            // content-type is set or backend can't read it
+            "Content-Type": "application/x-www-form-urlencoded",
+          },
+          // this is to ensure cookies are sent over
+          withCredentials: true,
+        }
+      )
+      .then((response) => {
+        dispatch(setUser(response.data));
+        navigate("/");
+      })
+      .catch((err) => {
+        setError(err.response.data);
+        setTimeout(() => setError(""), 3000);
+      });
+  };
+
   return (
     <div className="container min-h-screen mx-auto">
-      <div className="bg-slate-300 mx-auto my-5 rounded-xl shadow-sm p-3 space-y-2">
+      <form
+        className="bg-slate-300 mx-auto my-5 rounded-xl shadow-sm p-3 space-y-2"
+        onSubmit={handleSubmit}
+      >
         <Input
           label={"username"}
           value={username}
@@ -29,7 +75,8 @@ function SignupForm() {
             Login here!
           </Link>
         </p>
-      </div>
+      </form>
+      <Snackbar error={error} onClose={() => setError("")} />
     </div>
   );
 }

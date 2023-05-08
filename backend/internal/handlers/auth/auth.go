@@ -2,6 +2,7 @@ package auth
 
 import (
 	"context"
+	"encoding/json"
 	"gossip/internal/database"
 	"gossip/internal/models"
 	"net/http"
@@ -15,6 +16,14 @@ var (
 	store = sessions.NewCookieStore(key)
 )
 
+func getApiUser(user models.User) models.ApiUser {
+	apiUser := models.ApiUser{}
+	// is there a less tedious way to copy structs...
+	apiUser.ID = user.ID
+	apiUser.Username = user.Username
+	return apiUser
+}
+
 func hashPassword(password string) (string, error) {
 	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
 	return string(bytes), err
@@ -23,6 +32,12 @@ func hashPassword(password string) (string, error) {
 func checkPasswordHash(password, hash string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
 	return err == nil
+}
+
+func RetrieveSession(w http.ResponseWriter, r *http.Request) {
+	user := r.Context().Value("user").(models.User)
+	apiUser := getApiUser(user)
+	json.NewEncoder(w).Encode(apiUser)
 }
 
 func RequireLogin(next http.Handler) http.Handler {
@@ -70,6 +85,10 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 
 	session.Values["user"] = user.ID
 	session.Save(r, w)
+
+	apiUser := getApiUser(user)
+
+	json.NewEncoder(w).Encode(apiUser)
 }
 
 func HandleLogout(w http.ResponseWriter, r *http.Request) {
@@ -87,6 +106,7 @@ func HandleSignup(w http.ResponseWriter, r *http.Request) {
 
 	if username == "" || password == "" {
 		http.Error(w, "username and password cannot be empty", http.StatusUnauthorized)
+		return
 	}
 
 	db := database.GetDb()
@@ -101,5 +121,10 @@ func HandleSignup(w http.ResponseWriter, r *http.Request) {
 	}
 
 	session.Values["user"] = newUser.ID
+
 	session.Save(r, w)
+
+	apiUser := getApiUser(newUser)
+
+	json.NewEncoder(w).Encode(apiUser)
 }
