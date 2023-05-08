@@ -6,6 +6,8 @@ type User struct {
 	gorm.Model
 	Username string `gorm:"uniqueIndex"`
 	Password string `json:"-"`
+	Posts    []Post
+	Comments []Comment
 }
 
 type ApiUser struct {
