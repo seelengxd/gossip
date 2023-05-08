@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"gossip/internal/handlers/auth"
 	"gossip/internal/handlers/comments"
 	"gossip/internal/handlers/posts"
 
@@ -14,14 +15,22 @@ func AddCommentsRoutes(r chi.Router) {
 		r.Use(posts.PostCtx)
 
 		r.Get("/", comments.HandleIndex)
-		r.Post("/", comments.HandleCreate)
+
+		r.Group(func(r chi.Router) {
+			r.Use(auth.RequireLogin)
+			r.Post("/", comments.HandleCreate)
+		})
 
 		// Group is useful for which route runs what middleware
 		r.Group(func(r chi.Router) {
 			r.Use(comments.CommentCtx)
-			r.Put("/{id}", comments.HandleUpdate)
-			r.Delete("/{id}", comments.HandleDestroy)
 			r.Get("/{id}", comments.HandleShow)
+
+			r.Group(func(r chi.Router) {
+				r.Use(auth.RequireLogin)
+				r.Put("/{id}", comments.HandleUpdate)
+				r.Delete("/{id}", comments.HandleDestroy)
+			})
 		})
 
 	})

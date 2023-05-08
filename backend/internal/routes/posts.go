@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"gossip/internal/handlers/auth"
 	"gossip/internal/handlers/posts"
 
 	"github.com/go-chi/chi/v5"
@@ -10,13 +11,21 @@ func AddPostRoutes(r chi.Router) {
 	r.Route("/posts", func(r chi.Router) {
 		r.Get("/", posts.HandleIndex)
 
-		r.Post("/", posts.HandleCreate)
-
-		r.Route("/{postId}", func(r chi.Router) {
+		r.Group(func(r chi.Router) {
 			r.Use(posts.PostCtx)
-			r.Get("/", posts.HandleShow)
-			r.Put("/", posts.HandleUpdate)
-			r.Delete("/", posts.HandleDestroy)
+			r.Get("/{postId}", posts.HandleShow)
+		})
+
+		r.Group(func(r chi.Router) {
+			r.Use(auth.RequireLogin)
+			r.Post("/", posts.HandleCreate)
+
+			r.Route("/{postId}", func(r chi.Router) {
+				r.Use(posts.PostCtx)
+				r.Put("/", posts.HandleUpdate)
+				r.Delete("/", posts.HandleDestroy)
+
+			})
 
 		})
 
