@@ -9,7 +9,7 @@ interface InputProps {
 function Input({ label, value, onChange }: InputProps) {
   return (
     <div className="grid grid-cols-2">
-      <label className="">
+      <label className="text-right mr-5">
         {label[0].toUpperCase() + label.toLowerCase().slice(1)}:
       </label>
       <input

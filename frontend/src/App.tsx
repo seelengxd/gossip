@@ -3,11 +3,7 @@ import "./App.css";
 import Navbar from "./components/Navbar";
 import LoginForm from "./pages/auth/LoginForm";
 import SignupForm from "./pages/auth/SignupForm";
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "./app/store";
-import axios from "axios";
-import { setUser } from "./reducers/authSlice";
+import Home from "./pages/Home";
 
 function App() {
   return (
@@ -17,6 +13,7 @@ function App() {
         <Routes>
           <Route path="/login" element={<LoginForm />} />
           <Route path="/signup" element={<SignupForm />} />
+          <Route path="/" element={<Home />} />
         </Routes>
       </BrowserRouter>
     </div>

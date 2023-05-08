@@ -64,12 +64,12 @@ function SignupForm() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <div>
+        <div className="flex justify-center">
           <button className="bg-cyan-500 px-3 border hover:bg-cyan-300">
             Sign up
           </button>
         </div>
-        <p>
+        <p className="text-center">
           Already have an account?{" "}
           <Link to="/login" className="text-cyan-600 hover:text-cyan-500">
             Login here!
