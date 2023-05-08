@@ -3,9 +3,9 @@ import Input from "../../components/Input";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../app/store";
-import axios from "axios";
 import { setUser } from "../../reducers/authSlice";
 import Snackbar from "../../components/Snackbar";
+import { signUp } from "../../services/authService";
 
 function SignupForm() {
   const [username, setUsername] = useState("");
@@ -14,7 +14,6 @@ function SignupForm() {
   const user = useSelector((state: RootState) => state.auth.user);
   const dispatch = useDispatch();
   const [error, setError] = useState("");
-  const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
   if (user != null) {
     navigate("/");
@@ -22,24 +21,9 @@ function SignupForm() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    axios
-      .post(
-        `${baseUrl}/signup`,
-        {
-          username,
-          password,
-        },
-        {
-          headers: {
-            // content-type is set or backend can't read it
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-          // this is to ensure cookies are sent over
-          withCredentials: true,
-        }
-      )
-      .then((response) => {
-        dispatch(setUser(response.data));
+    signUp(username, password)
+      .then((user) => {
+        dispatch(setUser(user));
         navigate("/");
       })
       .catch((err) => {

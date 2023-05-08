@@ -3,9 +3,9 @@ import Input from "../../components/Input";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../app/store";
-import axios from "axios";
 import { setUser } from "../../reducers/authSlice";
 import Snackbar from "../../components/Snackbar";
+import { logIn } from "../../services/authService";
 
 function LoginForm() {
   const [username, setUsername] = useState("");
@@ -14,7 +14,6 @@ function LoginForm() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [error, setError] = useState("");
-  const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
   if (user != null) {
     navigate("/");
@@ -22,24 +21,9 @@ function LoginForm() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    axios
-      .post(
-        `${baseUrl}/login`,
-        {
-          username,
-          password,
-        },
-        {
-          headers: {
-            // content-type is set or backend can't read it
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-          // this is to ensure cookies are sent over
-          withCredentials: true,
-        }
-      )
-      .then((response) => {
-        dispatch(setUser(response.data));
+    logIn(username, password)
+      .then((user) => {
+        dispatch(setUser(user));
         navigate("/");
       })
       .catch(() => {
@@ -49,7 +33,7 @@ function LoginForm() {
   };
 
   return (
-    <div className="container min-h-screen mx-auto">
+    <div className="container min-h-full mx-auto">
       <form
         className="bg-slate-300 mx-auto my-5 rounded-xl shadow-sm p-3 space-y-2"
         onSubmit={handleSubmit}

@@ -1,27 +1,24 @@
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { RootState } from "../app/store";
-import axios from "axios";
 import { logOut, setUser } from "../reducers/authSlice";
 import { useEffect } from "react";
+import { destroySession, restoreSession } from "../services/authService";
 
 function Navbar() {
   const user = useSelector((state: RootState) => state.auth.user);
   const dispatch = useDispatch();
-  const baseUrl = process.env.REACT_APP_API_BASE_URL;
 
   useEffect(() => {
     if (user == null) {
-      axios
-        .get(`${baseUrl}/session`, { withCredentials: true })
-        .then((response) => dispatch(setUser(response.data)))
-        .catch((err) => {});
+      restoreSession()
+        .then((user) => dispatch(setUser(user)))
+        .catch(() => {});
     }
   }, []);
 
   const handleLogout = () => {
-    axios
-      .get(`${baseUrl}/logout`, { withCredentials: true })
+    destroySession()
       .then(() => dispatch(logOut()))
       .catch((err) => console.log(err));
   };
