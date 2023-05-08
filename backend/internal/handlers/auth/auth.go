@@ -6,12 +6,23 @@ import (
 	"net/http"
 
 	"github.com/gorilla/sessions"
+	"golang.org/x/crypto/bcrypt"
 )
 
 var (
 	key   = []byte("super-secret-key")
 	store = sessions.NewCookieStore(key)
 )
+
+func hashPassword(password string) (string, error) {
+	bytes, err := bcrypt.GenerateFromPassword([]byte(password), 14)
+	return string(bytes), err
+}
+
+func checkPasswordHash(password, hash string) bool {
+	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
+	return err == nil
+}
 
 func RequireLogin(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -49,7 +60,7 @@ func HandleLogin(w http.ResponseWriter, r *http.Request) {
 	user := models.User{}
 	result := db.Model(&models.User{}).Where(map[string]interface{}{"username": username}).First(&user)
 
-	if result.Error != nil || user.ID == 0 || user.Password != password {
+	if result.Error != nil || user.ID == 0 || !checkPasswordHash(password, user.Password) {
 		http.Error(w, "incorrect username or password", http.StatusUnauthorized)
 		return
 	}
@@ -71,9 +82,14 @@ func HandleSignup(w http.ResponseWriter, r *http.Request) {
 	username := r.FormValue("username")
 	password := r.FormValue("password")
 
+	if username == "" || password == "" {
+		http.Error(w, "username and password cannot be empty", http.StatusUnauthorized)
+	}
+
 	db := database.GetDb()
 
-	newUser := models.User{Username: username, Password: password}
+	hashedPassword, _ := hashPassword(password)
+	newUser := models.User{Username: username, Password: hashedPassword}
 	result := db.Create(&newUser)
 
 	if result.Error != nil {
