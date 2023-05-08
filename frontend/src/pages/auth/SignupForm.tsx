@@ -6,6 +6,7 @@ import { RootState } from "../../app/store";
 import { setUser } from "../../reducers/authSlice";
 import Snackbar from "../../components/Snackbar";
 import { signUp } from "../../services/authService";
+import Form from "../../components/Form";
 
 function SignupForm() {
   const [username, setUsername] = useState("");
@@ -33,35 +34,29 @@ function SignupForm() {
   };
 
   return (
-    <div className="container min-h-screen mx-auto">
-      <form
-        className="bg-slate-300 mx-auto my-5 rounded-xl shadow-sm p-3 space-y-2"
-        onSubmit={handleSubmit}
-      >
-        <Input
-          label={"username"}
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-        />
-        <Input
-          label={"password"}
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <div className="flex justify-center">
-          <button className="bg-cyan-500 px-3 border hover:bg-cyan-300">
-            Sign up
-          </button>
-        </div>
-        <p className="text-center">
-          Already have an account?{" "}
-          <Link to="/login" className="text-cyan-600 hover:text-cyan-500">
-            Login here!
-          </Link>
-        </p>
-      </form>
-      <Snackbar error={error} onClose={() => setError("")} />
-    </div>
+    <Form error={error} onClose={() => setError} handleSubmit={handleSubmit}>
+      <Input
+        label={"username"}
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
+      />
+      <Input
+        label={"password"}
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+      />
+      <div className="flex justify-center">
+        <button className="bg-cyan-500 px-3 border hover:bg-cyan-300">
+          Sign up
+        </button>
+      </div>
+      <p className="text-center">
+        Already have an account?{" "}
+        <Link to="/login" className="text-cyan-600 hover:text-cyan-500">
+          Login here!
+        </Link>
+      </p>
+    </Form>
   );
 }
 

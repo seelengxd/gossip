@@ -26,7 +26,10 @@ function Navbar() {
   return (
     <header className="flex bg-slate-800 text-white justify-between">
       <div>
-        <h1 className="p-3 text-xl">Gossip</h1>
+        <Link to="/">
+          {" "}
+          <h1 className="p-3 text-xl">Gossip</h1>
+        </Link>
       </div>
       <div className="flex space-x-4 p-3">
         {user ? (
