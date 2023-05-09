@@ -1,18 +1,27 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Form from "../../components/Form";
 import Input from "../../components/Input";
+import { PostData } from "../../types/post";
 
 interface Props {
   formTitle: string;
   handleSubmit: (
     e: React.FormEvent<HTMLFormElement>
   ) => (title: string, content: string) => void;
+  initialPost?: PostData;
 }
 
-function PostForm({ formTitle, handleSubmit }: Props) {
+function PostForm({ formTitle, handleSubmit, initialPost }: Props) {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    if (initialPost) {
+      setTitle(initialPost.title);
+      setContent(initialPost.content);
+    }
+  }, [initialPost]);
   return (
     <Form
       error={error}

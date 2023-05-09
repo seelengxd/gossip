@@ -29,3 +29,24 @@ export async function postShow(id: number) {
   });
   return response.data;
 }
+
+export async function postUpdate(id: number, title: string, content: string) {
+  const response = await axios.put(
+    `${baseUrl}/posts/${id}`,
+    { title, content },
+    {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      withCredentials: true,
+    }
+  );
+  return response.data;
+}
+
+export async function postDestroy(id: number) {
+  const response = await axios.delete(`${baseUrl}/posts/${id}`, {
+    withCredentials: true,
+  });
+  return response.data;
+}

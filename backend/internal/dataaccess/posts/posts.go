@@ -34,5 +34,6 @@ func Update(db *gorm.DB, post *models.Post, title string, content string) {
 }
 
 func Destroy(db *gorm.DB, post *models.Post) {
+	// Todo: currently, deleted posts' comments are still there. figure out what to do with them
 	db.Delete(post)
 }

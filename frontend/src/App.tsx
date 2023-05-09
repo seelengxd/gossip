@@ -6,6 +6,7 @@ import SignupForm from "./pages/auth/SignupForm";
 import Home from "./pages/home/Home";
 import CreatePostForm from "./pages/posts/CreatePostForm";
 import ShowPost from "./pages/posts/ShowPost";
+import UpdatePostForm from "./pages/posts/UpdatePostForm";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/posts/new" element={<CreatePostForm />} />
           <Route path="/posts/:id" element={<ShowPost />} />
+          <Route path="/posts/:id/edit" element={<UpdatePostForm />} />
         </Routes>
       </BrowserRouter>
     </div>

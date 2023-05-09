@@ -5,6 +5,7 @@ import { PostListData } from "../../types/post";
 import PostListCard from "./PostListCard";
 import { useSelector } from "react-redux";
 import { RootState } from "../../app/store";
+import LinkButton from "../../components/LinkButton";
 
 function Home() {
   const [posts, setPosts] = useState<PostListData[]>([]);
@@ -19,13 +20,7 @@ function Home() {
   return (
     <div className="container min-h-full mx-auto space-y-4">
       <h1 className="text-3xl mt-5">Posts</h1>
-      {user && (
-        <Link to="/posts/new">
-          <button className="bg-slate-600 text-white p-2 my-2 hover:bg-slate-400">
-            Create Post
-          </button>
-        </Link>
-      )}
+      {user && <LinkButton to="/posts/new" label="Create Post" />}
       {posts.map((post) => (
         <PostListCard key={post.id} post={post} />
       ))}

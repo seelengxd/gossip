@@ -10,8 +10,8 @@ function CreatePostForm() {
       e.preventDefault();
       postCreate(title, content)
         .then((response) => {
-          // Todo: this should go to post show page once its up
-          navigate("/");
+          const id = response.ID;
+          navigate(`/posts/${id}`);
         })
         .catch((err) => console.log(err));
     };
