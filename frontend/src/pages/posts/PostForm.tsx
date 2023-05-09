@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Form from "../../components/Form";
 import Input from "../../components/Input";
 import { PostData } from "../../types/post";
+import Button from "../../components/Button";
 
 interface Props {
   formTitle: string;
@@ -47,9 +48,7 @@ function PostForm({ formTitle, handleSubmit, initialPost }: Props) {
         />
       </div>
       <div className="flex justify-center">
-        <button className="bg-cyan-500 px-3 border hover:bg-cyan-300">
-          Submit!
-        </button>
+        <Button label="Submit" />
       </div>
     </Form>
   );

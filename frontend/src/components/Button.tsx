@@ -1,7 +1,7 @@
 interface Props {
   label: string;
-  onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
-  danger: boolean;
+  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  danger?: boolean;
 }
 
 function Button({ label, onClick, danger }: Props) {

@@ -45,7 +45,7 @@ function Navbar() {
         ) : (
           <>
             <Link to="/login" className="hover:text-teal-300">
-              Login
+              Log in
             </Link>
             <Link to="/signup" className="hover:text-teal-300">
               Sign up

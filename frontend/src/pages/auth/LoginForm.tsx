@@ -6,6 +6,7 @@ import { RootState } from "../../app/store";
 import { setUser } from "../../reducers/authSlice";
 import { logIn } from "../../services/authService";
 import Form from "../../components/Form";
+import Button from "../../components/Button";
 
 function LoginForm() {
   const [username, setUsername] = useState("");
@@ -45,9 +46,7 @@ function LoginForm() {
         onChange={(e) => setPassword(e.target.value)}
       />
       <div className="flex justify-center">
-        <button className="bg-cyan-500 px-3 border hover:bg-cyan-300">
-          Login
-        </button>
+        <Button label="Log in" />
       </div>
       <p className="text-center">
         No account yet?{" "}
