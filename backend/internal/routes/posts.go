@@ -20,11 +20,10 @@ func AddPostRoutes(r chi.Router) {
 			r.Use(auth.RequireLogin)
 			r.Post("/", posts.HandleCreate)
 
-			r.Route("/{postId}", func(r chi.Router) {
+			r.Group(func(r chi.Router) {
 				r.Use(posts.PostCtx)
-				r.Put("/", posts.HandleUpdate)
-				r.Delete("/", posts.HandleDestroy)
-
+				r.Put("/{postId}", posts.HandleUpdate)
+				r.Delete("/{postId}", posts.HandleDestroy)
 			})
 
 		})
