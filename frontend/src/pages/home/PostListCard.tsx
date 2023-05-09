@@ -1,4 +1,6 @@
+import { Link } from "react-router-dom";
 import { PostListData } from "../../types/post";
+import Card from "../../components/Card";
 
 interface Props {
   post: PostListData;
@@ -7,11 +9,13 @@ interface Props {
 function PostListCard({ post }: Props) {
   const { title, content, user } = post;
   return (
-    <div className="shadow-md shadow-slate-400 border-md p-5 relative">
-      <h2 className="text-xl">{title}</h2>
-      <p>{content}</p>
+    <Card>
+      <Link to={`/posts/${post.id}`}>
+        <h2 className="text-xl hover:text-cyan-400 hover:underline">{title}</h2>
+      </Link>
+      <p className="mb-1">{content}</p>
       <p className="absolute right-2 bottom-2">by: {user.username}</p>
-    </div>
+    </Card>
   );
 }
 
