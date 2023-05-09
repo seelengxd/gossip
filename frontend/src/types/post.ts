@@ -1,3 +1,4 @@
+import { CommentListData } from "./comment";
 import { UserListData } from "./user";
 
 export interface PostListData {
@@ -5,4 +6,8 @@ export interface PostListData {
   title: string;
   content: string;
   user: UserListData;
+}
+
+export interface PostData extends PostListData {
+  comments: CommentListData[];
 }

@@ -6,22 +6,13 @@ import (
 	"gorm.io/gorm"
 )
 
-func postToApiMiniPost(post *models.Post) *models.ApiMiniPost {
-	apiMiniPost := models.ApiMiniPost{}
-	apiMiniPost.ID = post.ID
-	apiMiniPost.Title = post.Title
-	apiMiniPost.Content = post.Content
-	apiMiniPost.User = models.ApiUser{ID: post.User.ID, Username: post.User.Username}
-	return &apiMiniPost
-}
-
 func List(db *gorm.DB) (*[]*models.ApiMiniPost, error) {
 	posts := make([]*models.Post, 0)
 	db.Model(&models.Post{}).Preload("User").Find(&posts)
 	apiPosts := make([]*models.ApiMiniPost, 0, len(posts))
 
 	for _, post := range posts {
-		apiPosts = append(apiPosts, postToApiMiniPost(post))
+		apiPosts = append(apiPosts, post.ToApiMiniPost())
 	}
 
 	return &apiPosts, nil
@@ -29,7 +20,8 @@ func List(db *gorm.DB) (*[]*models.ApiMiniPost, error) {
 
 func Find(db *gorm.DB, id int) (*models.Post, error) {
 	var post models.Post
-	result := db.Model(&models.Post{}).Preload("Comments").First(&post, id)
+	result := db.Model(&models.Post{}).Preload("Comments").Preload("User").Preload("Comments.User").First(&post, id)
+
 	return &post, result.Error
 }
 

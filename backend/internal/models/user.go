@@ -14,3 +14,7 @@ type ApiUser struct {
 	ID       uint   `json:"id"`
 	Username string `json:"username"`
 }
+
+func (user *User) toApiUser() *ApiUser {
+	return &ApiUser{ID: user.ID, Username: user.Username}
+}

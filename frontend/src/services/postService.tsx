@@ -22,3 +22,10 @@ export async function postCreate(title: string, content: string) {
   );
   return response.data;
 }
+
+export async function postShow(id: number) {
+  const response = await axios.get(`${baseUrl}/posts/${id}`, {
+    withCredentials: true,
+  });
+  return response.data;
+}

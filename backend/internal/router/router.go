@@ -1,7 +1,9 @@
 package router
 
 import (
+	"fmt"
 	"gossip/internal/routes"
+	"net/http"
 
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/chi/v5"
@@ -28,6 +30,12 @@ func Setup() chi.Router {
 	apiRouter := chi.NewRouter()
 	setUpRoutes(apiRouter)
 	r.Mount("/api", apiRouter)
+
+	// helper to print all routes
+	chi.Walk(r, func(method string, route string, handler http.Handler, middlewares ...func(http.Handler) http.Handler) error {
+		fmt.Printf("[%s]: '%s' has %d middlewares\n", method, route, len(middlewares))
+		return nil
+	})
 
 	return r
 }

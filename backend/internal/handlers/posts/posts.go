@@ -48,7 +48,7 @@ func HandleIndex(w http.ResponseWriter, r *http.Request) {
 
 func HandleShow(w http.ResponseWriter, r *http.Request) {
 	post := r.Context().Value("post").(*models.Post)
-	json.NewEncoder(w).Encode(post)
+	json.NewEncoder(w).Encode(*post.ToApiPost())
 }
 
 func HandleCreate(w http.ResponseWriter, r *http.Request) {
