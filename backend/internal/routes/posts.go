@@ -22,6 +22,7 @@ func AddPostRoutes(r chi.Router) {
 
 			r.Group(func(r chi.Router) {
 				r.Use(posts.PostCtx)
+				r.Use(posts.CheckBelongsToUser)
 				r.Put("/{postId}", posts.HandleUpdate)
 				r.Delete("/{postId}", posts.HandleDestroy)
 			})

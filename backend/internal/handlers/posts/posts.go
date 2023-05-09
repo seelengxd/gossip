@@ -39,6 +39,18 @@ func PostCtx(next http.Handler) http.Handler {
 
 }
 
+func CheckBelongsToUser(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		post := r.Context().Value("post").(*models.Post)
+		currentUser := r.Context().Value("user").(*models.User)
+		if post.ID != currentUser.ID {
+			http.Error(w, http.StatusText(http.StatusForbidden), http.StatusForbidden)
+		}
+
+		next.ServeHTTP(w, r)
+	})
+}
+
 func HandleIndex(w http.ResponseWriter, r *http.Request) {
 	db := database.GetDb()
 	posts, _ := postsDb.List(db)
