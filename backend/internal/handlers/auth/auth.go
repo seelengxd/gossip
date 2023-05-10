@@ -35,8 +35,8 @@ func checkPasswordHash(password, hash string) bool {
 }
 
 func RetrieveSession(w http.ResponseWriter, r *http.Request) {
-	user := r.Context().Value("user").(models.User)
-	apiUser := getApiUser(user)
+	user := r.Context().Value("user").(*models.User)
+	apiUser := getApiUser(*user)
 	json.NewEncoder(w).Encode(apiUser)
 }
 
@@ -60,7 +60,7 @@ func RequireLogin(next http.Handler) http.Handler {
 			return
 		}
 
-		ctx := context.WithValue(r.Context(), "user", user)
+		ctx := context.WithValue(r.Context(), "user", &user)
 
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})

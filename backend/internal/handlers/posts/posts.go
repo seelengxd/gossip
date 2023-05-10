@@ -43,7 +43,8 @@ func CheckBelongsToUser(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		post := r.Context().Value("post").(*models.Post)
 		currentUser := r.Context().Value("user").(*models.User)
-		if post.ID != currentUser.ID {
+
+		if post.User.ID != currentUser.ID {
 			http.Error(w, http.StatusText(http.StatusForbidden), http.StatusForbidden)
 		}
 
@@ -66,12 +67,12 @@ func HandleShow(w http.ResponseWriter, r *http.Request) {
 func HandleCreate(w http.ResponseWriter, r *http.Request) {
 	title := r.FormValue("title")
 	content := r.FormValue("content")
-	user := r.Context().Value("user").(models.User)
+	user := r.Context().Value("user").(*models.User)
 
 	newPost := models.Post{Title: title, Content: content}
 
 	db := database.GetDb()
-	postsDb.Create(db, &user, &newPost)
+	postsDb.Create(db, user, &newPost)
 
 	json.NewEncoder(w).Encode(newPost)
 }
