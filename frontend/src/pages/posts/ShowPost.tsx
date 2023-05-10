@@ -26,7 +26,6 @@ function ShowPost() {
   const user = useSelector((state: RootState) => state.auth.user);
 
   const isPostByUser = user && post && user.id === post.user.id;
-  console.log(user, post, isPostByUser);
   const navigate = useNavigate();
   const [error, setError] = useState("");
   const [showCreateComment, setShowCreateComment] = useState(false);

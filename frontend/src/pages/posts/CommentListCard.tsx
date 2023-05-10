@@ -19,7 +19,7 @@ function CommentListCard({ comment, handleDelete, handleUpdate }: Props) {
   const user = useSelector((state: RootState) => state.auth.user);
   const isCommentByUser = user && comment && user.id === comment.user.id;
   const [isEditing, setIsEditing] = useState(false);
-  return isEditing ? (
+  return isCommentByUser && isEditing ? (
     <CommentForm
       formTitle="Edit Comment"
       handleSubmit={(e) => (content: string) => {
