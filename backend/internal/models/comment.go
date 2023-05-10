@@ -26,3 +26,7 @@ func (comment *Comment) ToApiComment() *ApiComment {
 	apiComment.User = *comment.User.toApiUser()
 	return &apiComment
 }
+
+func (comment *Comment) GetUserId() uint {
+	return comment.User.ID
+}

@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { postIndex } from "../../services/postService";
-import { Link } from "react-router-dom";
 import { PostListData } from "../../types/post";
 import PostListCard from "./PostListCard";
 import { useSelector } from "react-redux";
 import { RootState } from "../../app/store";
 import LinkButton from "../../components/LinkButton";
+import { Add } from "@mui/icons-material";
 
 function Home() {
   const [posts, setPosts] = useState<PostListData[]>([]);
@@ -20,7 +20,17 @@ function Home() {
   return (
     <div className="container min-h-full mx-auto space-y-4">
       <h1 className="text-3xl mt-5">Posts</h1>
-      {user && <LinkButton to="/posts/new" label="Create Post" />}
+      {user && (
+        <LinkButton
+          to="/posts/new"
+          label={
+            <span>
+              <Add className="mr-1" />
+              Create Post
+            </span>
+          }
+        />
+      )}
       {posts.map((post) => (
         <PostListCard key={post.id} post={post} />
       ))}

@@ -18,3 +18,7 @@ type ApiUser struct {
 func (user *User) toApiUser() *ApiUser {
 	return &ApiUser{ID: user.ID, Username: user.Username}
 }
+
+type UserIDGetter interface {
+	GetUserId() uint
+}

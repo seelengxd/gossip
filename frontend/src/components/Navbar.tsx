@@ -1,27 +1,13 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { RootState } from "../app/store";
-import { logOut, setUser } from "../reducers/authSlice";
-import { useEffect } from "react";
-import { destroySession, restoreSession } from "../services/authService";
 
-function Navbar() {
+interface Props {
+  handleLogout: (e: React.MouseEvent<HTMLParagraphElement>) => void;
+}
+
+function Navbar({ handleLogout }: Props) {
   const user = useSelector((state: RootState) => state.auth.user);
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (user == null) {
-      restoreSession()
-        .then((user) => dispatch(setUser(user)))
-        .catch(() => {});
-    }
-  }, []);
-
-  const handleLogout = () => {
-    destroySession()
-      .then(() => dispatch(logOut()))
-      .catch((err) => console.log(err));
-  };
 
   return (
     <header className="flex bg-slate-800 text-white justify-between">

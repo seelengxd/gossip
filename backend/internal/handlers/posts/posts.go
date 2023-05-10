@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	postsDb "gossip/internal/dataaccess/posts"
 	"gossip/internal/database"
+	"gossip/internal/handlers/auth"
 	"gossip/internal/models"
 	"net/http"
 	"strconv"
@@ -39,18 +40,7 @@ func PostCtx(next http.Handler) http.Handler {
 
 }
 
-func CheckBelongsToUser(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		post := r.Context().Value("post").(*models.Post)
-		currentUser := r.Context().Value("user").(*models.User)
-
-		if post.User.ID != currentUser.ID {
-			http.Error(w, http.StatusText(http.StatusForbidden), http.StatusForbidden)
-		}
-
-		next.ServeHTTP(w, r)
-	})
-}
+var CheckBelongsToUser = auth.GenerateCheckBelongsToUser[*models.Post]("post")
 
 func HandleIndex(w http.ResponseWriter, r *http.Request) {
 	db := database.GetDb()

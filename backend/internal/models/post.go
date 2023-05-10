@@ -50,3 +50,7 @@ func (post *Post) ToApiPost() *ApiPost {
 
 	return &apiPost
 }
+
+func (post *Post) GetUserId() uint {
+	return post.User.ID
+}

@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"gossip/internal/dataaccess/comments"
 	"gossip/internal/database"
+	"gossip/internal/handlers/auth"
 	"gossip/internal/models"
 	"net/http"
 	"strconv"
@@ -38,6 +39,8 @@ func CommentCtx(next http.Handler) http.Handler {
 	})
 }
 
+var CheckBelongsToUser = auth.GenerateCheckBelongsToUser[*models.Comment]("comment")
+
 func HandleIndex(w http.ResponseWriter, r *http.Request) {
 	post := r.Context().Value("post").(*models.Post)
 	json.NewEncoder(w).Encode(post.Comments)
@@ -50,10 +53,11 @@ func HandleShow(w http.ResponseWriter, r *http.Request) {
 
 func HandleCreate(w http.ResponseWriter, r *http.Request) {
 	post := r.Context().Value("post").(*models.Post)
+	user := r.Context().Value("user").(*models.User)
 	content := r.FormValue("content")
 
 	db := database.GetDb()
-	comments.Create(db, post, content)
+	comments.Create(db, user, post, content)
 }
 
 func HandleUpdate(w http.ResponseWriter, r *http.Request) {

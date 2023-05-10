@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 interface Props {
   to: string;
-  label: string;
+  label: string | React.ReactElement;
 }
 
 function LinkButton({ to, label }: Props) {

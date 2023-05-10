@@ -7,12 +7,36 @@ import Home from "./pages/home/Home";
 import CreatePostForm from "./pages/posts/CreatePostForm";
 import ShowPost from "./pages/posts/ShowPost";
 import UpdatePostForm from "./pages/posts/UpdatePostForm";
+import { useDispatch, useSelector } from "react-redux";
+import { destroySession, restoreSession } from "./services/authService";
+import { logOut, setUser } from "./reducers/authSlice";
+import { useEffect } from "react";
+import { RootState } from "./app/store";
 
 function App() {
+  const user = useSelector((state: RootState) => state.auth.user);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (user === null && document.cookie.includes("session-cookie")) {
+      restoreSession()
+        .then((user) => dispatch(setUser(user)))
+        .catch(() => {
+          dispatch(logOut());
+        });
+    }
+  }, []);
+
+  const handleLogout = () => {
+    destroySession()
+      .then(() => dispatch(logOut()))
+      .catch((err) => console.log(err));
+  };
+
   return (
-    <div className="App bg-slate-100 min-h-screen">
+    <div className="bg-slate-100 min-h-screen">
       <BrowserRouter>
-        <Navbar />
+        <Navbar handleLogout={handleLogout} />
         <Routes>
           <Route path="/login" element={<LoginForm />} />
           <Route path="/signup" element={<SignupForm />} />

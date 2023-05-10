@@ -28,6 +28,7 @@ func AddCommentsRoutes(r chi.Router) {
 
 			r.Group(func(r chi.Router) {
 				r.Use(auth.RequireLogin)
+				r.Use(comments.CheckBelongsToUser)
 				r.Put("/{id}", comments.HandleUpdate)
 				r.Delete("/{id}", comments.HandleDestroy)
 			})

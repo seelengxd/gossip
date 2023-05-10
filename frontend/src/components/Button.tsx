@@ -1,5 +1,5 @@
 interface Props {
-  label: string;
+  label: string | React.ReactElement;
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
   danger?: boolean;
 }

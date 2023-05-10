@@ -64,7 +64,22 @@ func RequireLogin(next http.Handler) http.Handler {
 
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
+}
 
+func GenerateCheckBelongsToUser[T models.UserIDGetter](key string) func(http.Handler) http.Handler {
+	return func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			item := r.Context().Value(key).(T)
+			currentUser := r.Context().Value("user").(*models.User)
+
+			if item.GetUserId() != currentUser.ID {
+				http.Error(w, http.StatusText(http.StatusForbidden), http.StatusForbidden)
+				return
+			}
+
+			next.ServeHTTP(w, r)
+		})
+	}
 }
 
 func HandleLogin(w http.ResponseWriter, r *http.Request) {

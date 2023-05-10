@@ -15,7 +15,7 @@ function UpdatePostForm() {
   const navigate = useNavigate();
   const [post, setPost] = useState<PostData | null>(null);
   const user = useSelector((state: RootState) => state.auth.user);
-  const isPostByUser = user?.id == post?.user.id;
+  const isPostByUser = user?.id === post?.user.id;
 
   useEffect(() => {
     postShow(+id!)
