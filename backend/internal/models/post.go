@@ -9,6 +9,7 @@ type Post struct {
 	Title    string `json:"title"`
 	Content  string `json:"content"`
 	Comments []Comment
+	Tags     []Tag `gorm:"many2many:post_tags;"`
 	UserID   uint
 	User     User
 }

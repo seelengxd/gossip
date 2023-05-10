@@ -19,6 +19,7 @@ func SetupDb() {
 	db.AutoMigrate(&models.Post{})
 	db.AutoMigrate(&models.Comment{})
 	db.AutoMigrate(&models.User{})
+	db.AutoMigrate(&models.Tag{})
 
 	globalDb = db
 }
