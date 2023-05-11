@@ -6,11 +6,11 @@ import (
 	"gorm.io/gorm"
 )
 
-func Index(db *gorm.DB) (*[]*models.Tag, error) {
-	tags := make([]*models.Tag, 0)
-	db.Model(&models.Tag{}).Find(&tags)
+func Index(db *gorm.DB) (*[]*models.ApiTag, error) {
+	tags := make([]*models.ApiTag, 0)
+	result := db.Model(&models.Tag{}).Find(&tags)
 
-	return &tags, nil
+	return &tags, result.Error
 }
 
 func Find(db *gorm.DB, id int) (*models.Tag, error) {

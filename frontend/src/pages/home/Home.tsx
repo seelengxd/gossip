@@ -26,7 +26,7 @@ function Home() {
           label={
             <span>
               <Add className="mr-1" />
-              Create Post
+              New Post
             </span>
           }
         />

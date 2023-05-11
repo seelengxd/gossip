@@ -12,6 +12,8 @@ import { destroySession, restoreSession } from "./services/authService";
 import { logOut, setUser } from "./reducers/authSlice";
 import { useEffect } from "react";
 import { RootState } from "./app/store";
+import TagIndex from "./pages/tags/TagIndex";
+import CreateTagForm from "./pages/tags/CreateTagForm";
 
 function App() {
   const user = useSelector((state: RootState) => state.auth.user);
@@ -44,6 +46,8 @@ function App() {
           <Route path="/posts/new" element={<CreatePostForm />} />
           <Route path="/posts/:id" element={<ShowPost />} />
           <Route path="/posts/:id/edit" element={<UpdatePostForm />} />
+          <Route path="/tags" element={<TagIndex />} />
+          <Route path="/tags/new" element={<CreateTagForm />} />
         </Routes>
       </BrowserRouter>
     </div>

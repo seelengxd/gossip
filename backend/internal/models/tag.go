@@ -21,3 +21,9 @@ func (t *Tag) BeforeSave(tx *gorm.DB) (err error) {
 	}
 	return
 }
+
+type ApiTag struct {
+	ID     uint   `json:"id"`
+	Name   string `json:"name"`
+	Colour string `json:"colour"`
+}

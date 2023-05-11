@@ -17,6 +17,16 @@ function Navbar({ handleLogout }: Props) {
           <h1 className="p-3 text-xl">Gossip</h1>
         </Link>
       </div>
+      <div className="flex space-x-8 p-3">
+        <Link to="/" className="hover:text-teal-300">
+          Home
+        </Link>
+        {user && (
+          <Link to="/tags" className="hover:text-teal-300">
+            Tags
+          </Link>
+        )}
+      </div>
       <div className="flex space-x-4 p-3">
         {user ? (
           <>

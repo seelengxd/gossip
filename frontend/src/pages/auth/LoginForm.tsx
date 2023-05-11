@@ -49,7 +49,7 @@ function LoginForm() {
         <Button label="Log in" />
       </div>
       <p className="text-center">
-        No account yet?{" "}
+        No account yet?
         <Link to="/signup" className="text-cyan-600 hover:text-cyan-500">
           Sign up here!
         </Link>
