@@ -17,7 +17,6 @@ function Home() {
       .catch((err) => console.log(err));
   }, []);
 
-  console.log(posts);
   return (
     <div className="container min-h-full mx-auto space-y-4 pb-4">
       <h1 className="text-3xl mt-5">Posts</h1>
