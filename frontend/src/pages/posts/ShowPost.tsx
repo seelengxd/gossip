@@ -14,7 +14,11 @@ import {
   commentDelete,
   commentUpdate,
 } from "../../services/commentService";
-import { Add, Delete, Edit } from "@mui/icons-material";
+import { Add, Cancel, Delete, Edit } from "@mui/icons-material";
+import Badge from "../../components/Badge";
+import { tagIndex } from "../../services/tagService";
+import { TagListData } from "../../types/tag";
+import { taggingCreate, taggingDelete } from "../../services/taggingService";
 
 type PostParams = {
   id: string;
@@ -31,6 +35,22 @@ function ShowPost() {
   const [showCreateComment, setShowCreateComment] = useState(false);
   const reversedComments = post?.comments?.slice().reverse();
 
+  const [tags, setTags] = useState<TagListData[]>([]);
+  const [chosenTag, setChosenTag] = useState<TagListData | null>(null);
+
+  const [isAddingTag, setIsAddingTag] = useState(false);
+
+  const tagOptions = tags.filter(
+    (tag) => post && !post.tags.map((tag) => tag.id).includes(tag.id)
+  );
+
+  const loadTags = () =>
+    tagIndex()
+      .then((tags) => {
+        setTags(tags);
+      })
+      .catch((err) => console.log(err));
+
   const id = +idParam!;
   const loadPost = () =>
     postShow(id)
@@ -39,6 +59,7 @@ function ShowPost() {
 
   useEffect(() => {
     loadPost();
+    loadTags();
   }, []);
 
   const handleError = (err: Error) => {
@@ -90,14 +111,92 @@ function ShowPost() {
         .catch((err) => handleError(err));
     };
 
+  const handleAddTag = () => {
+    if (chosenTag) {
+      taggingCreate(id, chosenTag.id).then(() => {
+        loadPost();
+        setIsAddingTag(false);
+      });
+    }
+  };
+
+  const handleDelete = (tagId: number) => () => {
+    if (window.confirm("Are you sure you want to delete this tag?")) {
+      taggingDelete(id, tagId)
+        .then(() => loadPost())
+        .catch((err) => handleError(err));
+    }
+  };
+
   return (
     <div className="container min-h-full mx-auto">
       {post && (
         <>
           <h1 className="text-3xl mt-5">{post.title}</h1>
+          {post.tags.map((tag) => (
+            <Badge
+              key={tag.id}
+              colour={tag.colour}
+              text={tag.name}
+              handleDelete={handleDelete(tag.id)}
+            />
+          ))}
           <p>by {post.user.username} </p>
+
           {isPostByUser && (
             <div className="space-x-5">
+              {tagOptions.length > 0 &&
+                (isAddingTag ? (
+                  <span className="space-x-5">
+                    <select
+                      className="p-1"
+                      onChange={(e) =>
+                        setChosenTag(
+                          tagOptions.filter(
+                            (tag) => tag.id == Number(e.target.value)
+                          )[0]
+                        )
+                      }
+                    >
+                      {tagOptions.map((tag) => (
+                        <option key={tag.id} value={tag.id}>
+                          {tag.name}
+                        </option>
+                      ))}
+                    </select>
+                    <Button
+                      label={
+                        <span>
+                          <Add className="mr-1" />
+                          Add
+                        </span>
+                      }
+                      onClick={handleAddTag}
+                    />
+                    <Button
+                      label={
+                        <span>
+                          <Cancel className="mr-1" />
+                          Cancel
+                        </span>
+                      }
+                      onClick={() => setIsAddingTag(false)}
+                    />
+                  </span>
+                ) : (
+                  <Button
+                    label={
+                      <span>
+                        <Add className="mr-1" />
+                        Add tag
+                      </span>
+                    }
+                    onClick={() => {
+                      setIsAddingTag(true);
+                      setChosenTag(tagOptions[0]);
+                    }}
+                  />
+                ))}
               <LinkButton
                 to={`/posts/${post.id}/edit`}
                 label={

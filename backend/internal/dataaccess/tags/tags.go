@@ -31,5 +31,5 @@ func Update(db *gorm.DB, tag *models.Tag, name string, colour string) error {
 
 func Destroy(db *gorm.DB, tag *models.Tag) {
 	db.Model(tag).Association("Posts").Clear()
-	db.Delete(tag)
+	db.Unscoped().Delete(tag)
 }

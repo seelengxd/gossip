@@ -27,3 +27,7 @@ type ApiTag struct {
 	Name   string `json:"name"`
 	Colour string `json:"colour"`
 }
+
+func (t Tag) ToApiTag() *ApiTag {
+	return &ApiTag{t.ID, t.Name, t.Colour}
+}

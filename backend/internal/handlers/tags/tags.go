@@ -15,7 +15,7 @@ import (
 
 func TagCtx(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		idParam := chi.URLParam(r, "id")
+		idParam := chi.URLParam(r, "tagId")
 		id, err := strconv.Atoi(idParam)
 
 		if err != nil {

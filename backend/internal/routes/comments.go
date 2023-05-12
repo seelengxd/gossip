@@ -8,7 +8,7 @@ import (
 	"github.com/go-chi/chi/v5"
 )
 
-func AddCommentsRoutes(r chi.Router) {
+func AddCommentRoutes(r chi.Router) {
 	// Route - mount a subRouter along a pattern string
 	r.Route("/posts/{postId}/comments", func(r chi.Router) {
 

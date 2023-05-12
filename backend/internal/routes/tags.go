@@ -17,8 +17,8 @@ func AddTagRoutes(r chi.Router) {
 		r.Group(func(r chi.Router) {
 			r.Use(tags.TagCtx)
 
-			r.Put("/{id}", tags.HandleUpdate)
-			r.Delete("/{id}", tags.HandleDestroy)
+			r.Put("/{tagId}", tags.HandleUpdate)
+			r.Delete("/{tagId}", tags.HandleDestroy)
 		})
 	})
 }

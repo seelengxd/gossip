@@ -1,4 +1,5 @@
 import { CommentListData } from "./comment";
+import { TagListData } from "./tag";
 import { UserListData } from "./user";
 
 export interface PostListData {
@@ -6,6 +7,7 @@ export interface PostListData {
   title: string;
   content: string;
   user: UserListData;
+  tags: TagListData[];
 }
 
 export interface PostData extends PostListData {

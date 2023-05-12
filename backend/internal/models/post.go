@@ -15,10 +15,11 @@ type Post struct {
 }
 
 type ApiMiniPost struct {
-	ID      uint    `json:"id"`
-	Title   string  `json:"title"`
-	Content string  `json:"content"`
-	User    ApiUser `json:"user"`
+	ID      uint      `json:"id"`
+	Title   string    `json:"title"`
+	Content string    `json:"content"`
+	User    ApiUser   `json:"user"`
+	Tags    []*ApiTag `json:"tags"`
 }
 
 type ApiPost struct {
@@ -32,6 +33,14 @@ func (post *Post) ToApiMiniPost() *ApiMiniPost {
 	apiMiniPost.Title = post.Title
 	apiMiniPost.Content = post.Content
 	apiMiniPost.User = *post.User.toApiUser()
+
+	apiTags := make([]*ApiTag, 0, len(post.Tags))
+	for _, tag := range post.Tags {
+		apiTags = append(apiTags, tag.ToApiTag())
+	}
+
+	apiMiniPost.Tags = apiTags
+
 	return &apiMiniPost
 }
 
@@ -48,6 +57,13 @@ func (post *Post) ToApiPost() *ApiPost {
 	}
 
 	apiPost.Comments = apiComments
+
+	apiTags := make([]*ApiTag, 0, len(post.Tags))
+	for _, tag := range post.Tags {
+		apiTags = append(apiTags, tag.ToApiTag())
+	}
+
+	apiPost.Tags = apiTags
 
 	return &apiPost
 }

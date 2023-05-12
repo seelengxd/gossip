@@ -7,8 +7,9 @@ import (
 func GetRoutes() func(r chi.Router) {
 	return func(r chi.Router) {
 		AddPostRoutes(r)
-		AddCommentsRoutes(r)
+		AddCommentRoutes(r)
 		AddAuthRoutes(r)
 		AddTagRoutes(r)
+		AddTaggingRoutes(r)
 	}
 }
