@@ -20,7 +20,7 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (user === null && document.cookie.includes("session-cookie")) {
+    if (user === null) {
       restoreSession()
         .then((user) => dispatch(setUser(user)))
         .catch(() => {
