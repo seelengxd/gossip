@@ -1,5 +1,5 @@
 import { Delete } from "@mui/icons-material";
-import { lightenColour, darkenColour, isDarkColour } from "../util/colour";
+import { isDarkColour } from "../util/colour";
 
 interface Props {
   colour: string;

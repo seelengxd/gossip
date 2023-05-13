@@ -153,7 +153,7 @@ function ShowPost() {
                       onChange={(e) =>
                         setChosenTag(
                           tagOptions.filter(
-                            (tag) => tag.id == Number(e.target.value)
+                            (tag) => tag.id === Number(e.target.value)
                           )[0]
                         )
                       }
